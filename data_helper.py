@@ -3,6 +3,31 @@ import glob
 import os
 
 
+def load_train_valid_data(data_directory, validation_percentage):
+    # 加载数据
+    print('Loading data...')
+    x, y = load_images_and_labels(data_directory)
+    print('Total images: {:d}'.format(len(y)))
+
+    # 随机混淆数据
+    np.random.seed(10)
+    shuffle_indexes = np.random.permutation(np.arange(len(y)))
+    x_shuffled = x[shuffle_indexes]
+    y_shuffled = y[shuffle_indexes]
+
+    # 划分train/test集
+    validation_indexes = -1 * int(validation_percentage * len(y))
+    x_train, x_valid = x_shuffled[:validation_indexes], x_shuffled[
+        validation_indexes:]
+    y_train, y_valid = y_shuffled[:validation_indexes], y_shuffled[
+        validation_indexes:]
+
+    print('train/valid split: {:d}/{:d}'.format(len(x_train), len(x_valid)))
+    print('')
+
+    return x_train, x_valid, y_train, y_valid
+
+
 def load_images_and_labels(data_directory):
     images = []  # 存储所有图片的路径
     labels = []  # 每个图片对应的标签
@@ -28,7 +53,7 @@ def load_images_and_labels(data_directory):
         label[i - 1] = 1
         labels.extend([label for _ in dir_images])
 
-    return images, labels
+    return np.array(images), np.array(labels)
 
 
 def batch_iter(data, batch_size, num_epochs, shuffle=True):
