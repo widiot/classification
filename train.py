@@ -14,13 +14,13 @@ flags.DEFINE_string('data_directory', './data/flower_photos/',
                     'Directory path of the image data')
 flags.DEFINE_float('validation_percentage', 0.1,
                    'Percentage of the training data to use for validation')
-flags.DEFINE_integer('image_size', 100, 'Image size for resizing')
+flags.DEFINE_integer('image_size', 28, 'Image size for resizing')
 flags.DEFINE_integer('num_channels', 3, 'Number of image channels')
 
 # 模型超参数
 flags.DEFINE_float('learning_rate_base', 0.01,
                    'Base leaning rate for exponential decay')
-flags.DEFINE_float('learning_rate_decay', 0.99,
+flags.DEFINE_float('learning_rate_decay', 0.98,
                    'Attenuation rate of learning rate')
 flags.DEFINE_float('l2_reg_lambda', 0.0001, 'Lambda for L2 regularizer')
 flags.DEFINE_float('moving_average_decay', 0.99,
@@ -54,7 +54,7 @@ print('')
 
 # 加载数据
 x_train, x_valid, y_train, y_valid = data_helper.load_train_valid_data(
-    FLAGS.data_directory, FLAGS.validation_percentage)
+    FLAGS.data_directory, FLAGS.validation_percentage, FLAGS.image_size)
 
 # 创建模型对象
 cnn = ImageCNN(

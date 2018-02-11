@@ -5,7 +5,7 @@ import numpy as np
 class ImageCNN():
     def __init__(self,
                  num_classes,
-                 image_size=100,
+                 image_size=28,
                  num_channels=3,
                  filter1_size=5,
                  filter1_deep=32,
@@ -18,7 +18,7 @@ class ImageCNN():
             tf.float32, [None, image_size, image_size, num_channels],
             name='input_x')
         self.input_y = tf.placeholder(
-            tf.int32, [None, num_classes], name='input_y')
+            tf.float32, [None, num_classes], name='input_y')
         self.dropout_keep_prob = tf.placeholder(
             tf.float32, name='dropout_keep_prob')
 

@@ -4,7 +4,9 @@ import glob, os
 from skimage import io, transform
 
 
-def load_train_valid_data(data_directory, validation_percentage):
+def load_train_valid_data(data_directory,
+                          validation_percentage,
+                          image_size=100):
     # 加载数据
     print('Loading data...')
     x, y = load_images_and_labels(data_directory)
@@ -26,7 +28,8 @@ def load_train_valid_data(data_directory, validation_percentage):
     print('train/valid split: {:d}/{:d}'.format(len(x_train), len(x_valid)))
     print('')
 
-    return read_images(x_train), read_images(x_valid), y_train, y_valid
+    return read_images(x_train, image_size), read_images(
+        x_valid, image_size), y_train, y_valid
 
 
 def load_images_and_labels(data_directory):
@@ -71,7 +74,7 @@ def batch_iter(data, batch_size, num_epochs, shuffle=True):
             yield data[start_index:end_index]
 
 
-def read_images(images, image_size=100):
+def read_images(images, image_size):
     result = []
     print('\nReading images:')
     for i, im in enumerate(images):
@@ -84,5 +87,4 @@ def read_images(images, image_size=100):
 
 if __name__ == '__main__':
     data_directory = './data/flower_photos/'
-    images, labels = load_images_and_labels(data_directory)
-    print(images[:1000])
+    load_train_valid_data(data_directory, 0.1)
