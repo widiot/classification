@@ -18,7 +18,7 @@ class ImageCNN():
             tf.float32, [None, image_size, image_size, num_channels],
             name='input_x')
         self.input_y = tf.placeholder(
-            tf.float32, [None, num_classes], name='input_y')
+            tf.int32, [None, num_classes], name='input_y')
         self.dropout_keep_prob = tf.placeholder(
             tf.float32, name='dropout_keep_prob')
 
@@ -85,9 +85,12 @@ class ImageCNN():
                 fc1_l2_loss = tf.contrib.layers.l2_regularizer(l2_reg_lambda)(
                     W)
                 tf.add_to_collection('losses', fc1_l2_loss)
-            fc1 = tf.nn.relu(tf.matmul(reshaped, W) + b, name='relu')
-            # dropout
-            fc1 = tf.nn.dropout(fc1, self.dropout_keep_prob, name='dropout')
+            fc1 = tf.nn.relu(tf.nn.xw_plus_b(reshaped, W, b), name='relu')
+
+        # dropout
+        with tf.name_scope('dropout'):
+            fc1_drop = tf.nn.dropout(
+                fc1, self.dropout_keep_prob, name='dropout')
 
         # 第六层全连接层
         with tf.name_scope('output'):
@@ -99,7 +102,7 @@ class ImageCNN():
                 fc2_l2_loss = tf.contrib.layers.l2_regularizer(l2_reg_lambda)(
                     W)
                 tf.add_to_collection('losses', fc2_l2_loss)
-            self.scores = tf.nn.xw_plus_b(fc1, W, b, name='scores')
+            self.scores = tf.nn.xw_plus_b(fc1_drop, W, b, name='scores')
             self.predictions = tf.argmax(self.scores, 1, name='predictions')
 
         # 计算交叉损失熵

@@ -1,6 +1,7 @@
 import numpy as np
-import glob
-import os
+import tensorflow as tf
+import glob, os
+from skimage import io, transform
 
 
 def load_train_valid_data(data_directory, validation_percentage):
@@ -25,7 +26,7 @@ def load_train_valid_data(data_directory, validation_percentage):
     print('train/valid split: {:d}/{:d}'.format(len(x_train), len(x_valid)))
     print('')
 
-    return x_train, x_valid, y_train, y_valid
+    return read_images(x_train), read_images(x_valid), y_train, y_valid
 
 
 def load_images_and_labels(data_directory):
@@ -39,7 +40,7 @@ def load_images_and_labels(data_directory):
         if i == 0:
             continue
 
-        # 获取当前子目录下的有效图片
+        # 获取当前子目录下的有效图片名称
         dir_images = []  # 存储当前目录下的图片用于添加标签
         exts = ['jpg', 'jpeg', 'JPG', 'JPEG']
         dir_name = os.path.basename(sub_dir)  # 获取路径的最后一个目录名
@@ -60,7 +61,7 @@ def batch_iter(data, batch_size, num_epochs, shuffle=True):
     data = np.array(data)
     data_size = len(data)
     num_batches_per_epoch = int((data_size - 1) / batch_size) + 1
-    for epoch in range(num_epochs):
+    for _ in range(num_epochs):
         if shuffle:
             shuffle_indexes = np.random.permutation(np.arange(data_size))
             data = data[shuffle_indexes]
@@ -68,6 +69,17 @@ def batch_iter(data, batch_size, num_epochs, shuffle=True):
             start_index = batch_num * batch_size
             end_index = min(start_index + batch_size, data_size)
             yield data[start_index:end_index]
+
+
+def read_images(images, image_size=100):
+    result = []
+    print('\nReading images:')
+    for i, im in enumerate(images):
+        print(str(i) + ' ' + im)
+        img = io.imread(im)
+        img = transform.resize(img, (image_size, image_size))
+        result.append(img)
+    return result
 
 
 if __name__ == '__main__':
