@@ -1,5 +1,4 @@
 import numpy as np
-import tensorflow as tf
 import glob, os
 from skimage import io, transform
 

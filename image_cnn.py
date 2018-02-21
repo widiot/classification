@@ -89,7 +89,7 @@ class ImageCNN():
 
         # dropout
         with tf.name_scope('dropout'):
-            fc1_drop = tf.nn.dropout(
+            self.fc1_drop = tf.nn.dropout(
                 fc1, self.dropout_keep_prob, name='dropout')
 
         # 第六层全连接层
@@ -102,7 +102,7 @@ class ImageCNN():
                 fc2_l2_loss = tf.contrib.layers.l2_regularizer(l2_reg_lambda)(
                     W)
                 tf.add_to_collection('losses', fc2_l2_loss)
-            self.scores = tf.nn.xw_plus_b(fc1_drop, W, b, name='scores')
+            self.scores = tf.nn.xw_plus_b(self.fc1_drop, W, b, name='scores')
             self.predictions = tf.argmax(self.scores, 1, name='predictions')
 
         # 计算交叉损失熵
