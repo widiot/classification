@@ -4,9 +4,7 @@ import glob, os
 from skimage import io, transform
 
 
-def load_train_valid_data(data_directory,
-                          validation_percentage,
-                          image_size=100):
+def load_train_valid_data(data_directory, validation_percentage, image_size):
     # 加载数据
     print('Loading data...')
     x, y = load_images_and_labels(data_directory)
@@ -20,6 +18,8 @@ def load_train_valid_data(data_directory,
 
     # 划分train/test集
     validation_indexes = -1 * int(validation_percentage * len(y))
+    if validation_indexes == 0:
+        validation_indexes = -1
     x_train, x_valid = x_shuffled[:validation_indexes], x_shuffled[
         validation_indexes:]
     y_train, y_valid = y_shuffled[:validation_indexes], y_shuffled[
@@ -78,7 +78,7 @@ def read_images(images, image_size):
     result = []
     print('\nReading images:')
     for i, im in enumerate(images):
-        print(str(i) + ' ' + im)
+        # print(str(i) + ' ' + im)
         img = io.imread(im)
         img = transform.resize(img, (image_size, image_size))
         result.append(img)
