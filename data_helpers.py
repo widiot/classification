@@ -59,6 +59,17 @@ def load_images_and_labels(data_directory):
     return np.array(images), np.array(labels)
 
 
+def read_images(images, image_size):
+    result = []
+    print('\nReading images:')
+    for i, im in enumerate(images):
+        # print(str(i) + ' ' + im)
+        img = io.imread(im)
+        img = transform.resize(img, (image_size, image_size))
+        result.append(img)
+    return result
+
+
 def batch_iter(data, batch_size, num_epochs, shuffle=True):
     data = np.array(data)
     data_size = len(data)
@@ -73,17 +84,6 @@ def batch_iter(data, batch_size, num_epochs, shuffle=True):
             yield data[start_index:end_index]
 
 
-def read_images(images, image_size):
-    result = []
-    print('\nReading images:')
-    for i, im in enumerate(images):
-        # print(str(i) + ' ' + im)
-        img = io.imread(im)
-        img = transform.resize(img, (image_size, image_size))
-        result.append(img)
-    return result
-
-
 if __name__ == '__main__':
     data_directory = './data/flower_photos/'
-    load_train_valid_data(data_directory, 0.1)
+    load_train_valid_data(data_directory, 0.1, 28)
