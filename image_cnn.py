@@ -95,7 +95,7 @@ class ImageCNN():
         # 第六层全连接层
         with tf.name_scope('output'):
             W = tf.Variable(
-                tf.truncated_normal([fc_size, num_classes], stddev=0.2),
+                tf.truncated_normal([fc_size, num_classes], stddev=0.1),
                 name='W')
             b = tf.Variable(tf.constant(0.1, shape=[num_classes]), name='b')
             if l2_reg_lambda:
