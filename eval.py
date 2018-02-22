@@ -15,7 +15,7 @@ flags.DEFINE_string('data_directory', './data/flower_photos/',
 # 评估参数
 flags.DEFINE_integer('batch_size', 100, 'Batch Size')
 flags.DEFINE_integer('image_size', 28, 'Image size for resizing')
-flags.DEFINE_string('checkpoint_dir', './runs/1518354300/checkpoints',
+flags.DEFINE_string('checkpoint_dir', './runs/1519316254/checkpoints',
                     'Checkpoint directory from training run')
 flags.DEFINE_boolean('eval_train', False, 'Evaluate on all training data')
 

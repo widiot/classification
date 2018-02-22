@@ -1,7 +1,7 @@
 import tensorflow as tf
 import numpy as np
 import time, os, datetime
-import data_helper
+import data_helpers
 from image_cnn import ImageCNN
 
 # 参数
@@ -39,7 +39,7 @@ flags.DEFINE_integer('checkpoint_every', 100,
 
 # 训练参数
 flags.DEFINE_integer('batch_size', 100, 'Number of image in a batch')
-flags.DEFINE_integer('num_epochs', 100, 'Number of training epoch')
+flags.DEFINE_integer('num_epochs', 1000, 'Number of training epoch')
 
 # 打印参数
 FLAGS = flags.FLAGS
@@ -53,7 +53,7 @@ print('')
 # ==================================================
 
 # 加载数据
-x_train, x_valid, y_train, y_valid = data_helper.load_train_valid_data(
+x_train, x_valid, y_train, y_valid = data_helpers.load_train_valid_data(
     FLAGS.data_directory, FLAGS.validation_percentage, FLAGS.image_size)
 
 # 创建模型对象
@@ -148,7 +148,7 @@ with tf.Session() as sess:
             time_str, step, loss, accuracy))
 
     # 生成batches
-    batches = data_helper.batch_iter(
+    batches = data_helpers.batch_iter(
         list(zip(x_train, y_train)), FLAGS.batch_size, FLAGS.num_epochs)
 
     # 迭代训练每个batch
